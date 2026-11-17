@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -7,7 +7,7 @@ using UnityEngine;
 public class BlueprintBlock
 {
     public int x, y, z;
-    public string part;     // PartType ªº¦W¦r¡A¨Ò¦p "Body"¡B"Wheel"
+    public string part;     // PartType çš„åå­—ï¼Œä¾‹å¦‚ "Body"ã€"Wheel"
 }
 
 [Serializable]
@@ -31,7 +31,7 @@ public static class CarLibrary
         return name.Trim();
     }
 
-    // ª±®a¦sÀÉ¡G¼g¨ì¹q¸£ªº¨Ï¥ÎªÌ¸ê®Æ§¨¡A¤£·|¶i Git
+    // ç©å®¶å­˜æª”ï¼šå¯«åˆ°é›»è…¦çš„ä½¿ç”¨è€…è³‡æ–™å¤¾ï¼Œä¸æœƒé€² Git
     public static string Save(CarBlueprint bp)
     {
         bp.name = SafeName(bp.name);
@@ -41,7 +41,7 @@ public static class CarLibrary
         return path;
     }
 
-    // ¥ı§äª±®a¦sÀÉ¡A§ä¤£¨ì¦A§ä±M®×¤º«Øªº½d¨Ò¨®¡]Assets/Resources/Cars¡^
+    // å…ˆæ‰¾ç©å®¶å­˜æª”ï¼Œæ‰¾ä¸åˆ°å†æ‰¾å°ˆæ¡ˆå…§å»ºçš„ç¯„ä¾‹è»Šï¼ˆAssets/Resources/Carsï¼‰
     public static CarBlueprint Load(string name)
     {
         name = SafeName(name);

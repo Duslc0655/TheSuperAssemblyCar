@@ -1,10 +1,10 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public static class PartFactory
 {
     public static GameObject Create(PartDef def, float cellSize)
     {
-        // ®Úª«¥ó­t³d¸I¼²¡]¾ã®æ¤j¤p¡^¡A¥~Æ[¬O¤lª«¥ó
+        // æ ¹ç‰©ä»¶è² è²¬ç¢°æ’ï¼ˆæ•´æ ¼å¤§å°ï¼‰ï¼Œå¤–è§€æ˜¯å­ç‰©ä»¶
         GameObject root = new GameObject(def.displayName);
         BoxCollider box = root.AddComponent<BoxCollider>();
         box.size = Vector3.one * cellSize;

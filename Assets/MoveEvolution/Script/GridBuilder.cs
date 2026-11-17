@@ -1,5 +1,6 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class GridBuilder : MonoBehaviour
@@ -22,7 +23,7 @@ public class GridBuilder : MonoBehaviour
     Rect panelRect;
     float yStats, yTest, yName, ySave, yHint;
 
-    const float BtnH = 34f, Gap = 4f, PanelW = 190f;
+    const float BtnH = 34f, Gap = 4f, PanelW = 230f, StatsH = 196f;
 
     void Start()
     {
@@ -32,12 +33,18 @@ public class GridBuilder : MonoBehaviour
             vehicleRoot = new GameObject("Vehicle").transform;
 
         yStats = 20 + PartCatalog.All.Length * (BtnH + Gap) + 4;
-        yTest = yStats + 70;
+        yTest = yStats + StatsH;
         yName = yTest + BtnH + 6;
         ySave = yName + 32;
         yHint = ySave + BtnH + 4;
         panelRect = new Rect(10, 10, PanelW, yHint + 60);
         RebuildGhost();
+    }
+
+    // è¢«é—œæ‰æ™‚ï¼ˆä¾‹å¦‚è»Šå» é¸å–®åˆ‡åˆ°åˆ¥çš„åŠŸèƒ½ï¼‰æŠŠé è¦½æ–¹å¡Šè—èµ·ä¾†
+    void OnDisable()
+    {
+        if (ghost != null) ghost.SetActive(false);
     }
 
     void Update()
@@ -48,8 +55,10 @@ public class GridBuilder : MonoBehaviour
 
         Vector2 mp = mouse.position.ReadValue();
         bool overPanel = !testDriving && panelRect.Contains(new Vector2(mp.x, Screen.height - mp.y));
+        // æ»‘é¼ åœ¨å…¶ä»– uGUI ä»‹é¢ä¸Šï¼ˆä¾‹å¦‚è»Šå» å³å´é¸å–®ï¼‰æ™‚ï¼Œä¹Ÿä¸æ”¾é›¶ä»¶
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) overPanel = true;
 
-        // ¥¿¦b¿é¤J¨®¦W®É¡A«öÁä¤£·í¦¨§Ö±¶Áä¡FÂI¤@¤U­±ªO¥~­±´Nµ²§ô¿é¤J
+        // æ­£åœ¨è¼¸å…¥è»Šåæ™‚ï¼ŒæŒ‰éµä¸ç•¶æˆå¿«æ·éµï¼›é»ä¸€ä¸‹é¢æ¿å¤–é¢å°±çµæŸè¼¸å…¥
         bool typing = GUIUtility.keyboardControl != 0;
         if (typing && !overPanel && (mouse.leftButton.wasPressedThisFrame || mouse.rightButton.wasPressedThisFrame))
         {
@@ -62,7 +71,7 @@ public class GridBuilder : MonoBehaviour
         if (!typing && kb != null && kb.tKey.wasPressedThisFrame) ToggleTestDrive();
         if (testDriving) { ghost.SetActive(false); return; }
 
-        // ¼Æ¦rÁä 1~6 ¤Á´«¹s¥ó
+        // æ•¸å­—éµ 1~6 åˆ‡æ›é›¶ä»¶
         if (!typing && kb != null)
             for (int i = 0; i < PartCatalog.All.Length; i++)
                 if (kb[Key.Digit1 + i].wasPressedThisFrame) Select(i);
@@ -78,12 +87,12 @@ public class GridBuilder : MonoBehaviour
             return;
         }
 
-        // ¥kÁä¡G§R°£
+        // å³éµï¼šåˆªé™¤
         Vector3Int target;
         if (mouse.rightButton.wasPressedThisFrame && cells.TryGetValue(hit.collider.gameObject, out target))
             RemoveBlock(target);
 
-        // §âÂI¨ìªº¦ì¸m©¹ªk½u¤è¦V±À¥b®æ¡A´N¬O­n©ñ¸mªº®æ¤l
+        // æŠŠé»åˆ°çš„ä½ç½®å¾€æ³•ç·šæ–¹å‘æ¨åŠæ ¼ï¼Œå°±æ˜¯è¦æ”¾ç½®çš„æ ¼å­
         Vector3 p = hit.point + hit.normal * (cellSize * 0.5f);
         Vector3Int cell = new Vector3Int(
             Mathf.FloorToInt(p.x / cellSize),
@@ -95,17 +104,26 @@ public class GridBuilder : MonoBehaviour
         if (!free) return;
         ghost.transform.position = CellToWorld(cell);
 
-        // ¥ªÁä¡G©ñ¸m
-        if (mouse.leftButton.wasPressedThisFrame) PlaceBlock(cell, PartCatalog.All[selected]);
+        // å·¦éµï¼šæ”¾ç½®
+        if (mouse.leftButton.wasPressedThisFrame)
+        {
+            PartDef def = PartCatalog.All[selected];
+            if (def.maxPerCar > 0 && CountOf(def.type) >= def.maxPerCar)
+                hint = def.displayName + " ä¸€å°è»Šæœ€å¤š " + def.maxPerCar + " å€‹";
+            else
+                PlaceBlock(cell, def);
+        }
     }
 
-    // ¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w ¸Õ¾r ¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ è©¦é§• â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     void ToggleTestDrive()
     {
         if (!testDriving)
         {
-            if (blocks.Count == 0) { hint = "¥ı©ñ¤@¨Ç¤è¶ô"; return; }
+            if (blocks.Count == 0) { hint = "å…ˆæ”¾ä¸€äº›æ–¹å¡Š"; return; }
+            VehicleStats st = CurrentStats();
+            if (st.Overloaded) { hint = "è¶…éè² è·å€¼ï¼ˆ" + st.load.ToString("0.#") + " / " + st.loadCapacity.ToString("0.#") + "ï¼‰ï¼ŒåŠ ä¸»é«”æˆ–æ‹¿æ‰é›¶ä»¶"; return; }
 
             savedLayout.Clear();
             foreach (var kv in blocks)
@@ -133,18 +151,18 @@ public class GridBuilder : MonoBehaviour
             playerInput = null;
             if (orbit != null) orbit.followTarget = null;
 
-            // §â¨®¬å±¼¡A·Ó¦s¦nªº°t¸m­«·sÂ\¦^®æ¤l¤W
+            // æŠŠè»Šç æ‰ï¼Œç…§å­˜å¥½çš„é…ç½®é‡æ–°æ“ºå›æ ¼å­ä¸Š
             ClearAll();
             foreach (var item in savedLayout) PlaceBlock(item.Key, item.Value);
             testDriving = false;
         }
     }
 
-    // ¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w ¦sÀÉ / ÅªÀÉ ¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ å­˜æª” / è®€æª” â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     void SaveCar()
     {
-        if (blocks.Count == 0) { hint = "¨S¦³¤è¶ô¥i¥H¦s"; return; }
+        if (blocks.Count == 0) { hint = "æ²’æœ‰æ–¹å¡Šå¯ä»¥å­˜"; return; }
 
         var bp = new CarBlueprint { name = carName };
         foreach (var kv in blocks)
@@ -153,14 +171,14 @@ public class GridBuilder : MonoBehaviour
             bp.blocks.Add(new BlueprintBlock { x = kv.Key.x, y = kv.Key.y, z = kv.Key.z, part = d.type.ToString() });
         }
         string path = CarLibrary.Save(bp);
-        hint = "¤w¦sÀÉ¡G" + bp.name;
-        Debug.Log("¨®½ø¦sÀÉ¦ì¸m¡G" + path);
+        hint = "å·²å­˜æª”ï¼š" + bp.name;
+        Debug.Log("è»Šè¼›å­˜æª”ä½ç½®ï¼š" + path);
     }
 
     void LoadCar()
     {
         CarBlueprint bp = CarLibrary.Load(carName);
-        if (bp == null) { hint = "§ä¤£¨ì¡G" + carName; return; }
+        if (bp == null) { hint = "æ‰¾ä¸åˆ°ï¼š" + carName; return; }
 
         ClearAll();
         int n = 0;
@@ -171,7 +189,7 @@ public class GridBuilder : MonoBehaviour
             PlaceBlock(new Vector3Int(b.x, b.y, b.z), def);
             n++;
         }
-        hint = "¤w¸ü¤J¡G" + bp.name + "¡]" + n + " ­Ó¤è¶ô¡^";
+        hint = "å·²è¼‰å…¥ï¼š" + bp.name + "ï¼ˆ" + n + " å€‹æ–¹å¡Šï¼‰";
     }
 
     void ClearAll()
@@ -181,7 +199,7 @@ public class GridBuilder : MonoBehaviour
         cells.Clear();
     }
 
-    // ¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w ¤è¶ô ¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ æ–¹å¡Š â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     void Select(int index)
     {
@@ -221,7 +239,21 @@ public class GridBuilder : MonoBehaviour
 
     Vector3 CellToWorld(Vector3Int c) { return (new Vector3(c.x, c.y, c.z) + Vector3.one * 0.5f) * cellSize; }
 
-    // ¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w ¤¶­± ¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w
+    int CountOf(PartType t)
+    {
+        int n = 0;
+        foreach (var b in blocks.Values) if (b.GetComponent<BlockInfo>().def.type == t) n++;
+        return n;
+    }
+
+    VehicleStats CurrentStats()
+    {
+        var defs = new List<PartDef>();
+        foreach (var b in blocks.Values) defs.Add(b.GetComponent<BlockInfo>().def);
+        return VehicleStats.From(defs);
+    }
+
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ ä»‹é¢ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     void OnGUI()
     {
@@ -248,17 +280,27 @@ public class GridBuilder : MonoBehaviour
         }
         GUI.backgroundColor = old;
 
-        int engines = 0, wheels = 0;
         float mass = 0f;
-        foreach (var b in blocks.Values)
+        foreach (var b in blocks.Values) mass += b.GetComponent<BlockInfo>().def.mass;
+        VehicleStats st = CurrentStats();
+        GUI.Label(new Rect(20, yStats, PanelW - 20, 22),
+            "æ–¹å¡Š " + blocks.Count + "ã€€é‡é‡ " + mass.ToString("0.0"), lbl);
+        var loadLbl = new GUIStyle(lbl);
+        loadLbl.normal.textColor = st.Overloaded ? new Color(1f, 0.4f, 0.35f) : Color.white;
+        GUI.Label(new Rect(20, yStats + 22, PanelW - 20, 22),
+            "è² è· " + st.load.ToString("0.#") + " / " + st.loadCapacity.ToString("0.#") + (st.Overloaded ? "ï¼ˆè¶…è¼‰ï¼‰" : ""), loadLbl);
+        for (int i = 0; i < 5; i++)
         {
-            var d = b.GetComponent<BlockInfo>().def;
-            mass += d.mass;
-            if (d.type == PartType.Engine) engines++;
-            else if (d.type == PartType.Wheel) wheels++;
+            float y = yStats + 50 + i * 26;
+            GUI.Label(new Rect(20, y, 44, 22), VehicleStats.Names[i], lbl);
+            Rect bar = new Rect(66, y + 5, PanelW - 66 - 44, 12);
+            GUI.color = new Color(0.3f, 0.3f, 0.3f);
+            GUI.DrawTexture(bar, Texture2D.whiteTexture);
+            GUI.color = new Color(0.35f, 0.8f, 0.45f);
+            GUI.DrawTexture(new Rect(bar.x, bar.y, bar.width * st[i] / VehicleStats.Max, bar.height), Texture2D.whiteTexture);
+            GUI.color = Color.white;
+            GUI.Label(new Rect(PanelW - 38, y, 40, 22), st[i].ToString("0.#"), lbl);
         }
-        GUI.Label(new Rect(20, yStats, PanelW - 20, 70),
-            "Blocks: " + blocks.Count + "\nMass: " + mass.ToString("0.0") + "\nEngine: " + engines + "   Wheel: " + wheels, lbl);
 
         if (GUI.Button(new Rect(20, yTest, PanelW - 20, BtnH), "T  Test Drive", btn))
         {

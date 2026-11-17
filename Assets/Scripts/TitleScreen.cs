@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -30,6 +30,9 @@ public class TitleScreen : MonoBehaviour
     void Awake()
     {
         if (cameraIntro == null) cameraIntro = FindFirstObjectByType<CameraIntro>();
+        // 運鏡結束後在車廠門口顯示「進入車廠」
+        if (GetComponent<FactoryEntrance>() == null)
+            gameObject.AddComponent<FactoryEntrance>().cameraIntro = cameraIntro;
         EnsureEventSystem();
         Build();
     }

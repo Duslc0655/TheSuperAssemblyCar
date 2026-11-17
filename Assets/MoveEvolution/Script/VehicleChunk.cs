@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 
 public class VehicleChunk : MonoBehaviour
@@ -7,7 +7,7 @@ public class VehicleChunk : MonoBehaviour
     [System.NonSerialized] public Rigidbody rb;
     [System.NonSerialized] public List<BlockInfo> blocks = new List<BlockInfo>();
 
-    // ¨Ì·Ó¥Ø«eÁÙ¦b³o¤@¶ô¸Ìªº¤è¶ô¡A­«·sºâÁ`­«¶q©M­«¤ß
+    // ä¾ç…§ç›®å‰é‚„åœ¨é€™ä¸€å¡Šè£¡çš„æ–¹å¡Šï¼Œé‡æ–°ç®—ç¸½é‡é‡å’Œé‡å¿ƒ
     public void RefreshMass()
     {
         float m = 0f;

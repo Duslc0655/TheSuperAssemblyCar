@@ -1,9 +1,9 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class OrbitCamera : MonoBehaviour
 {
-    public Transform followTarget;      // �վr�ɥ� GridBuilder �۰ʳ]�w
+    public Transform followTarget;      // 試駕時由 GridBuilder 自動設定
     public Vector3 center = new Vector3(0, 1, 0);
     public float distance = 11f;
     public float minDistance = 3f;

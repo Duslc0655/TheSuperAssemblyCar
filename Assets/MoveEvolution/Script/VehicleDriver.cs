@@ -1,40 +1,40 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 
 public class VehicleDriver : MonoBehaviour, IVehicleController
 {
-    [Header("¾r¾p")]
-    public float enginePower = 30f;         // ¨C­Ó¤ŞÀº´£¨ÑªºÁ`§á¤O¡A¥­¤Àµ¹©Ò¦³ÅX°Ê½ü
-    public float topSpeed = 1200f;          // ½ü­L³Ì°ªÂà³t¡]«×/¬í¡^
-    public float coastBrakeTorque = 3f;     // ©ñ¶}ªoªù®Éªº·Æ¦æªı¤O
-    public float maxBrakeTorque = 30f;      // brake = 1 ®Éªº·Ù¨®¤O
-    public float handbrakeTorque = 60f;     // ¤â·Ù¨®
-    public float forwardSign = 1f;          // ¦pªG«e¶i®É¨®¤l­Ë°h¡A§ï¦¨ -1
+    [Header("é§•é§›")]
+    public float enginePower = 30f;         // æ¯å€‹å¼•æ“æä¾›çš„ç¸½æ‰­åŠ›ï¼Œå¹³åˆ†çµ¦æ‰€æœ‰é©…å‹•è¼ª
+    public float topSpeed = 1200f;          // è¼ªèƒæœ€é«˜è½‰é€Ÿï¼ˆåº¦/ç§’ï¼‰
+    public float coastBrakeTorque = 3f;     // æ”¾é–‹æ²¹é–€æ™‚çš„æ»‘è¡Œé˜»åŠ›
+    public float maxBrakeTorque = 30f;      // brake = 1 æ™‚çš„ç…è»ŠåŠ›
+    public float handbrakeTorque = 60f;     // æ‰‹ç…è»Š
+    public float forwardSign = 1f;          // å¦‚æœå‰é€²æ™‚è»Šå­å€’é€€ï¼Œæ”¹æˆ -1
 
-    [Header("Âà¦V")]
-    public float maxSteerAngle = 30f;           // «e½ü³Ì¤jÂà¨¤¡]«×¡^
-    public float highSpeedSteerFactor = 0.35f;  // ¥ş³t®É³Ñ¤UªºÂà¨¤¤ñ¨Ò
-    public float steerSpring = 200f;            // Âà¦V¼uÂ®ªº¤O¹D
+    [Header("è½‰å‘")]
+    public float maxSteerAngle = 30f;           // å‰è¼ªæœ€å¤§è½‰è§’ï¼ˆåº¦ï¼‰
+    public float highSpeedSteerFactor = 0.35f;  // å…¨é€Ÿæ™‚å‰©ä¸‹çš„è½‰è§’æ¯”ä¾‹
+    public float steerSpring = 200f;            // è½‰å‘å½ˆç°§çš„åŠ›é“
     public float steerDamper = 20f;
-    public float steerSign = 1f;                // ¦pªG«ö D ½ü­L©¹¥ªÂà¡A§ï¦¨ -1
+    public float steerSign = 1f;                // å¦‚æœæŒ‰ D è¼ªèƒå¾€å·¦è½‰ï¼Œæ”¹æˆ -1
 
-    [Header("¸Õ¾r¶}©l®É")]
+    [Header("è©¦é§•é–‹å§‹æ™‚")]
     public float wheelScale = 1.3f;
     public float liftHeight = 0.2f;
 
-    [Header("ªo¶q")]
+    [Header("æ²¹é‡")]
+    public bool useFuel = false;            // é›¶ä»¶æ”¹ç‰ˆå¾Œæ²’æœ‰æ²¹ç®±ï¼Œé è¨­ä¸è€—æ²¹
     public float fuelBase = 20f;
-    public float fuelPerTank = 40f;
 
-    [Header("¼²À»")]
+    [Header("æ’æ“Š")]
     public float strengthMultiplier = 1f;
     public float burstSpeed = 3f;
     public bool logImpacts = true;
 
-    [Header("Åã¥Ü")]
-    public bool showHud = true;             // NPC ªº¨®­nÃö±¼
+    [Header("é¡¯ç¤º")]
+    public bool showHud = true;             // NPC çš„è»Šè¦é—œæ‰
 
-    // ¢w¢w ¤¶­± IVehicleController ¢w¢w
+    // â”€â”€ ä»‹é¢ IVehicleController â”€â”€
 
     public void SetInput(float throttle, float steer, float brake, bool handbrake = false)
     {
@@ -82,7 +82,7 @@ public class VehicleDriver : MonoBehaviour, IVehicleController
 
     public Bounds LocalBounds { get { return cachedBounds; } }
 
-    // ¢w¢w µ¹½s¿è¾¹¡]GridBuilder¡^¥Îªº ¢w¢w
+    // â”€â”€ çµ¦ç·¨è¼¯å™¨ï¼ˆGridBuilderï¼‰ç”¨çš„ â”€â”€
 
     public Transform CenterTransform { get { return VehicleTransform; } }
     public string Error { get; private set; }
@@ -95,9 +95,9 @@ public class VehicleDriver : MonoBehaviour, IVehicleController
         public BlockInfo info;
         public Rigidbody rb;
         public Collider col;
-        public HingeJoint joint;        // ½ü­Lªººu°ÊÃö¸`
-        public HingeJoint steerJoint;   // Âà¦V¸`³s¨ì¨®¨­ªºÂà¦VÃö¸`¡]¥u¦³Âà¦V½ü¦³¡^
-        public Rigidbody knuckle;       // ¬İ¤£¨£ªºÂà¦V¸`¡]¥u¦³Âà¦V½ü¦³¡^
+        public HingeJoint joint;        // è¼ªèƒçš„æ»¾å‹•é—œç¯€
+        public HingeJoint steerJoint;   // è½‰å‘ç¯€é€£åˆ°è»Šèº«çš„è½‰å‘é—œç¯€ï¼ˆåªæœ‰è½‰å‘è¼ªæœ‰ï¼‰
+        public Rigidbody knuckle;       // çœ‹ä¸è¦‹çš„è½‰å‘ç¯€ï¼ˆåªæœ‰è½‰å‘è¼ªæœ‰ï¼‰
         public VehicleChunk chunk;
         public bool steered;
     }
@@ -126,7 +126,7 @@ public class VehicleDriver : MonoBehaviour, IVehicleController
         new Vector3Int(0, 0, 1), new Vector3Int(0, 0, -1)
     };
 
-    // ¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w «Ø¥ß ¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ å»ºç«‹ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     public bool Build(Dictionary<Vector3Int, GameObject> blocks)
     {
@@ -147,9 +147,9 @@ public class VehicleDriver : MonoBehaviour, IVehicleController
             solids[kv.Key] = info;
             solidList.Add(info);
         }
-        if (solidList.Count == 0) { Error = "¦Ü¤Ö­n¦³¤@­Ó«D½ü­Lªº¤è¶ô"; return false; }
+        if (solidList.Count == 0) { Error = "è‡³å°‘è¦æœ‰ä¸€å€‹éè¼ªèƒçš„æ–¹å¡Š"; return false; }
 
-        // ¦Ü¤Ö«e«á¨â±Æ½ü­L¡A³Ì«e­±¨º¤@±Æ¤~¬OÂà¦V½ü
+        // è‡³å°‘å‰å¾Œå…©æ’è¼ªèƒï¼Œæœ€å‰é¢é‚£ä¸€æ’æ‰æ˜¯è½‰å‘è¼ª
         bool hasFrontAxle = maxWheelZ > minWheelZ;
 
         BoxCollider firstBox = solidList[0].GetComponent<BoxCollider>();
@@ -157,14 +157,14 @@ public class VehicleDriver : MonoBehaviour, IVehicleController
 
         foreach (var go in blocks.Values) go.transform.position += Vector3.up * liftHeight;
 
-        // «D½ü­L¤è¶ô¡G¬Û³sªººâ¦P¤@¸s¡A¨C¤@¸s¤@­Ó­èÅé
+        // éè¼ªèƒæ–¹å¡Šï¼šç›¸é€£çš„ç®—åŒä¸€ç¾¤ï¼Œæ¯ä¸€ç¾¤ä¸€å€‹å‰›é«”
         foreach (var comp in FindComponents(solidList))
         {
             VehicleChunk c = CreateChunk(comp, null);
             if (mainChunk == null || c.rb.mass > mainChunk.rb.mass) mainChunk = c;
         }
 
-        // ½ü­L¦U¦Û¤@­Ó­èÅé
+        // è¼ªèƒå„è‡ªä¸€å€‹å‰›é«”
         foreach (var kv in blocks)
         {
             BlockInfo info = kv.Value.GetComponent<BlockInfo>();
@@ -207,7 +207,7 @@ public class VehicleDriver : MonoBehaviour, IVehicleController
         return new Wheel { info = info, rb = rb, col = sphere, steered = steered };
     }
 
-    // ¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w µ²ºc ¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ çµæ§‹ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     static List<List<BlockInfo>> FindComponents(List<BlockInfo> list)
     {
@@ -329,7 +329,7 @@ public class VehicleDriver : MonoBehaviour, IVehicleController
         cachedBounds = result;
     }
 
-    // ¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w ½ü­L ¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ è¼ªèƒ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     bool HasNeighborIn(Wheel w, VehicleChunk chunk)
     {
@@ -386,7 +386,7 @@ public class VehicleDriver : MonoBehaviour, IVehicleController
 
         if (w.steered)
         {
-            // ¨®¨­ ¢w¢w(««ª½¶b¡A­t³d¥ª¥kÂà)¢w¢w Âà¦V¸` ¢w¢w(¾î¦V¶b¡A­t³dºu°Ê)¢w¢w ½ü­L
+            // è»Šèº« â”€â”€(å‚ç›´è»¸ï¼Œè² è²¬å·¦å³è½‰)â”€â”€ è½‰å‘ç¯€ â”€â”€(æ©«å‘è»¸ï¼Œè² è²¬æ»¾å‹•)â”€â”€ è¼ªèƒ
             if (w.knuckle == null) w.knuckle = CreateKnuckle();
             w.knuckle.transform.SetPositionAndRotation(w.info.transform.position, target.transform.rotation);
             w.knuckle.linearVelocity = w.rb.linearVelocity;
@@ -448,17 +448,13 @@ public class VehicleDriver : MonoBehaviour, IVehicleController
     void RecountDrive()
     {
         EngineCount = 0;
-        int tanks = 0;
         if (mainChunk != null)
         {
             foreach (var b in mainChunk.blocks)
-            {
                 if (b.def.type == PartType.Engine) EngineCount++;
-                else if (b.def.type == PartType.FuelTank) tanks++;
-            }
         }
-        FuelMax = fuelBase + tanks * fuelPerTank;
-        Fuel = Mathf.Min(Fuel, FuelMax);
+        FuelMax = useFuel ? fuelBase : 1f;
+        Fuel = useFuel ? Mathf.Min(Fuel, FuelMax) : FuelMax;
     }
 
     bool IsDriving(Wheel w)
@@ -473,7 +469,7 @@ public class VehicleDriver : MonoBehaviour, IVehicleController
         return n;
     }
 
-    // ¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w ¼²À» ¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ æ’æ“Š â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     public void ReportImpact(Collision col)
     {
@@ -496,7 +492,7 @@ public class VehicleDriver : MonoBehaviour, IVehicleController
             if (bi.broken) continue;
             float limit = bi.def.strength * strengthMultiplier;
             if (logImpacts && kv.Value > limit * 0.3f)
-                Debug.Log(bi.def.displayName + " ¨ü¨ì½Ä¶q " + kv.Value.ToString("0.0") + " / ­@¨ü " + limit.ToString("0"));
+                Debug.Log(bi.def.displayName + " å—åˆ°è¡é‡ " + kv.Value.ToString("0.0") + " / è€å— " + limit.ToString("0"));
             if (kv.Value > limit && pendingSet.Add(bi))
                 pending.Add(new PendingBreak { block = bi, point = points[bi] });
         }
@@ -561,7 +557,7 @@ public class VehicleDriver : MonoBehaviour, IVehicleController
         }
     }
 
-    // ¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w ¾r¾p ¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ é§•é§› â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     void FixedUpdate()
     {
@@ -572,9 +568,9 @@ public class VehicleDriver : MonoBehaviour, IVehicleController
         float torquePerWheel = hasPower ? EngineCount * enginePower / driveWheels : 0f;
 
         bool braking = inBrake > 0.05f || inHandbrake;
-        float thr = braking ? 0f : inThrottle;   // ·Ù¨®Àu¥ı©óªoªù
+        float thr = braking ? 0f : inThrottle;   // ç…è»Šå„ªå…ˆæ–¼æ²¹é–€
 
-        // «e½üÂà¨¤¡G³t«×¶V§Ö¡A¯àÂàªº¨¤«×¶V¤p
+        // å‰è¼ªè½‰è§’ï¼šé€Ÿåº¦è¶Šå¿«ï¼Œèƒ½è½‰çš„è§’åº¦è¶Šå°
         float speed = mainChunk != null ? mainChunk.rb.linearVelocity.magnitude : 0f;
         float topMs = Mathf.Max(EstimatedMaxSpeedKmh / 3.6f, 1f);
         float steerAngle = inSteer * maxSteerAngle
@@ -616,7 +612,7 @@ public class VehicleDriver : MonoBehaviour, IVehicleController
             w.joint.motor = m;
         }
 
-        if (hasPower && !braking)
+        if (useFuel && hasPower && !braking)
             Fuel = Mathf.Max(0f, Fuel - Mathf.Abs(inThrottle) * EngineCount * Time.fixedDeltaTime);
     }
 
@@ -631,27 +627,40 @@ public class VehicleDriver : MonoBehaviour, IVehicleController
     void OnGUI()
     {
         if (!showHud || mainChunk == null) return;
-        float w = 400f, h = 100f;
+
+        // åº•éƒ¨åªæ”¾æ™‚é€Ÿï¼›æ“ä½œèªªæ˜ç§»åˆ°ç•«é¢ä¸Šæ–¹ï¼ˆè»Šå» é¸å–®çš„æ“ä½œæŒ‡å—ï¼‰
+        string warn = EngineCount == 0 ? "ä¸»è»Šé«”æ²’æœ‰å¼•æ“"
+                    : CountDriveWheels() == 0 ? "ä¸»è»Šé«”æ²’æœ‰è¼ªèƒ"
+                    : (useFuel && Fuel <= 0f) ? "æ²’æ²¹äº†"
+                    : null;
+        float w = 300f;
+        float h = 46f + (useFuel ? 22f : 0f) + (warn != null ? 26f : 0f);
         Rect r = new Rect((Screen.width - w) / 2f, Screen.height - h - 10f, w, h);
         GUI.Box(r, "");
 
-        var lbl = new GUIStyle(GUI.skin.label) { fontSize = 16 };
+        var lbl = new GUIStyle(GUI.skin.label) { fontSize = 22, alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold };
         lbl.normal.textColor = Color.white;
-        GUI.Label(new Rect(r.x + 10, r.y + 6, w - 20, 26),
-            "Speed: " + CurrentSpeedKmh.ToString("0") + " km/h", lbl);
+        float y = r.y + 8f;
+        GUI.Label(new Rect(r.x, y, w, 30), CurrentSpeedKmh.ToString("0") + " km/h", lbl);
+        y += 36f;
 
-        float frac = FuelMax > 0f ? Fuel / FuelMax : 0f;
-        Rect bar = new Rect(r.x + 10, r.y + 36, w - 20, 16);
-        GUI.color = Color.gray;
-        GUI.DrawTexture(bar, Texture2D.whiteTexture);
-        GUI.color = Color.Lerp(Color.red, Color.green, frac);
-        GUI.DrawTexture(new Rect(bar.x, bar.y, bar.width * frac, bar.height), Texture2D.whiteTexture);
-        GUI.color = Color.white;
+        if (useFuel)
+        {
+            float frac = FuelMax > 0f ? Fuel / FuelMax : 0f;
+            Rect bar = new Rect(r.x + 14, y, w - 28, 12);
+            GUI.color = Color.gray;
+            GUI.DrawTexture(bar, Texture2D.whiteTexture);
+            GUI.color = Color.Lerp(Color.red, Color.green, frac);
+            GUI.DrawTexture(new Rect(bar.x, bar.y, bar.width * frac, bar.height), Texture2D.whiteTexture);
+            GUI.color = Color.white;
+            y += 22f;
+        }
 
-        string warn = EngineCount == 0 ? "¥D¨®Åé¨S¦³¤ŞÀº"
-                    : CountDriveWheels() == 0 ? "¥D¨®Åé¨S¦³½ü­L"
-                    : Fuel <= 0f ? "¨Sªo¤F"
-                    : "WASD ¾r¾p¡@Shift ·Ù¨®¡@Space ¤â·Ù¡@T ¦^½s¿è";
-        GUI.Label(new Rect(r.x + 10, r.y + 60, w - 20, 30), warn, lbl);
+        if (warn != null)
+        {
+            var wl = new GUIStyle(lbl) { fontSize = 16, fontStyle = FontStyle.Normal };
+            wl.normal.textColor = new Color(1f, 0.55f, 0.45f);
+            GUI.Label(new Rect(r.x, y - 4f, w, 24), warn, wl);
+        }
     }
 }

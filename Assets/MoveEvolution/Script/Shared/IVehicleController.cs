@@ -1,27 +1,27 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 /// <summary>
-/// ¾r¾p­û¡]ª±®a©Î NPC¡^»P¨®¤l¤§¶¡ªº°ß¤@·¾³q¤è¦¡¡C
-/// ¬ù©w¡G¨®ÀY¥Ã»·´Â VehicleTransform.forward¡]+Z¡^¡C
+/// é§•é§›å“¡ï¼ˆç©å®¶æˆ– NPCï¼‰èˆ‡è»Šå­ä¹‹é–“çš„å”¯ä¸€æºé€šæ–¹å¼ã€‚
+/// ç´„å®šï¼šè»Šé ­æ°¸é æœ VehicleTransform.forwardï¼ˆ+Zï¼‰ã€‚
 /// </summary>
 public interface IVehicleController
 {
-    // throttle: -1 ­Ë¨® ~ 1 ¥ş³t«e¶i
-    // steer:    -1 ¥ªÂà ~ 1 ¥kÂà
-    // brake:    0 ¤£·Ù¨® ~ 1 ¥ş¤O·Ù¨®¡]·Ù¨®Àu¥ı©óªoªù¡^
-    // handbrake: ¤â·Ù¨®¡A½ü¤lÂê¦º
+    // throttle: -1 å€’è»Š ~ 1 å…¨é€Ÿå‰é€²
+    // steer:    -1 å·¦è½‰ ~ 1 å³è½‰
+    // brake:    0 ä¸ç…è»Š ~ 1 å…¨åŠ›ç…è»Šï¼ˆç…è»Šå„ªå…ˆæ–¼æ²¹é–€ï¼‰
+    // handbrake: æ‰‹ç…è»Šï¼Œè¼ªå­é–æ­»
     void SetInput(float throttle, float steer, float brake, bool handbrake = false);
 
-    // ¨®¤l¥Ø«eªº¥DÅé¡C¨®³Q¼²·´®É¥i¯à¬O null¡A¨Ï¥Î«e­nÀË¬d¡C
+    // è»Šå­ç›®å‰çš„ä¸»é«”ã€‚è»Šè¢«æ’æ¯€æ™‚å¯èƒ½æ˜¯ nullï¼Œä½¿ç”¨å‰è¦æª¢æŸ¥ã€‚
     Transform VehicleTransform { get; }
 
     float CurrentSpeedKmh { get; }
 
-    // ¥H¤U¤T¶µ¬O§Y®É­È¡A½ü­L¡B¤ŞÀº±¼¤F´N·|§ïÅÜ
-    float EstimatedMaxSpeedKmh { get; }   // ²z½×³Ì°ª³t¡A¤£¯à¶}®É¬° 0
+    // ä»¥ä¸‹ä¸‰é …æ˜¯å³æ™‚å€¼ï¼Œè¼ªèƒã€å¼•æ“æ‰äº†å°±æœƒæ”¹è®Š
+    float EstimatedMaxSpeedKmh { get; }   // ç†è«–æœ€é«˜é€Ÿï¼Œä¸èƒ½é–‹æ™‚ç‚º 0
     float TotalMass { get; }
-    bool IsOperational { get; }           // ¦³¤ŞÀº¡B¦³ÅX°Ê½ü¡B¦³ªo
+    bool IsOperational { get; }           // æœ‰å¼•æ“ã€æœ‰é©…å‹•è¼ªã€æœ‰æ²¹
 
-    // ¨®Åé¤j¤p¡A®y¼Ğ¬O VehicleTransform ªº°Ï°ì®y¼Ğ¡AÁ×»Ù¥i¥H¥Î
+    // è»Šé«”å¤§å°ï¼Œåº§æ¨™æ˜¯ VehicleTransform çš„å€åŸŸåº§æ¨™ï¼Œé¿éšœå¯ä»¥ç”¨
     Bounds LocalBounds { get; }
 }

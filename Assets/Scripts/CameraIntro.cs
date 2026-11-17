@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 #if ENABLE_INPUT_SYSTEM
@@ -24,6 +24,7 @@ public class CameraIntro : MonoBehaviour
     [Tooltip("鏡頭離廠房正面多遠 (m)")] public float frontDistance = 30f;
     [Tooltip("鏡頭高度 (m)")] public float frontHeight = 9f;
     [Tooltip("看向廠房離地多高 (m)")] public float lookHeight = 5f;
+    [Tooltip("門口按鈕放在廠房正面離地多高 (m)")] public float doorHeight = 3f;
 
     [Header("其他")]
     [Tooltip("播放中按任意鍵或點滑鼠可跳過")] public bool allowSkip = true;
@@ -168,6 +169,23 @@ public class CameraIntro : MonoBehaviour
         float reach = Mathf.Abs(dir.x) * hb.extents.x + Mathf.Abs(dir.z) * hb.extents.z;
         look = new Vector3(hb.center.x, hb.min.y + lookHeight, hb.center.z);
         pos = new Vector3(hb.center.x, hb.min.y, hb.center.z) + dir * (reach + frontDistance) + Vector3.up * frontHeight;
+        return true;
+    }
+
+    // 車廠正面（招牌、停車場那一面）牆面中央、離地 doorHeight 的位置
+    public bool TryGetFactoryDoor(out Vector3 door)
+    {
+        door = Vector3.zero;
+        Renderer hall = FindRenderer(factoryBuilding);
+        if (hall == null) return false;
+        Renderer front = FindRenderer(factoryFront);
+        Bounds hb = hall.bounds;
+        Vector3 dir = front != null ? front.bounds.center - hb.center : hb.center - center;
+        dir.y = 0f;
+        if (dir.sqrMagnitude < 1e-4f) dir = Vector3.forward;
+        dir.Normalize();
+        float reach = Mathf.Abs(dir.x) * hb.extents.x + Mathf.Abs(dir.z) * hb.extents.z;
+        door = new Vector3(hb.center.x, hb.min.y + doorHeight, hb.center.z) + dir * reach;
         return true;
     }
 

@@ -2,26 +2,131 @@
   "name": "BasicCar",
   "version": 1,
   "blocks": [
-    { "x": -1, "y": 0, "z": 0, "part": "Body" },
-    { "x": 0, "y": 0, "z": 0, "part": "Body" },
-    { "x": 1, "y": 0, "z": 0, "part": "Body" },
-    { "x": -1, "y": 0, "z": 1, "part": "Body" },
-    { "x": 0, "y": 0, "z": 1, "part": "Engine" },
-    { "x": 1, "y": 0, "z": 1, "part": "Body" },
-    { "x": -1, "y": 0, "z": 2, "part": "Body" },
-    { "x": 0, "y": 0, "z": 2, "part": "Engine" },
-    { "x": 1, "y": 0, "z": 2, "part": "Body" },
-    { "x": -1, "y": 0, "z": 3, "part": "Body" },
-    { "x": 0, "y": 0, "z": 3, "part": "Body" },
-    { "x": 1, "y": 0, "z": 3, "part": "Body" },
-    { "x": -1, "y": 0, "z": 4, "part": "Armor" },
-    { "x": 0, "y": 0, "z": 4, "part": "Armor" },
-    { "x": 1, "y": 0, "z": 4, "part": "Armor" },
-    { "x": -2, "y": 0, "z": 0, "part": "Wheel" },
-    { "x": -2, "y": 0, "z": 3, "part": "Wheel" },
-    { "x": 2, "y": 0, "z": 0, "part": "Wheel" },
-    { "x": 2, "y": 0, "z": 3, "part": "Wheel" },
-    { "x": 0, "y": 1, "z": 1, "part": "FuelTank" },
-    { "x": 0, "y": 1, "z": 0, "part": "Wing" }
+    {
+      "x": -1,
+      "y": 0,
+      "z": 0,
+      "part": "Body"
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "part": "Body"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": 0,
+      "part": "Body"
+    },
+    {
+      "x": -1,
+      "y": 0,
+      "z": 1,
+      "part": "Body"
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 1,
+      "part": "Engine"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": 1,
+      "part": "Body"
+    },
+    {
+      "x": -1,
+      "y": 0,
+      "z": 2,
+      "part": "Body"
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 2,
+      "part": "Engine"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": 2,
+      "part": "Body"
+    },
+    {
+      "x": -1,
+      "y": 0,
+      "z": 3,
+      "part": "Body"
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 3,
+      "part": "Body"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": 3,
+      "part": "Body"
+    },
+    {
+      "x": -1,
+      "y": 0,
+      "z": 4,
+      "part": "Body"
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 4,
+      "part": "Body"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": 4,
+      "part": "Body"
+    },
+    {
+      "x": -2,
+      "y": 0,
+      "z": 0,
+      "part": "Wheel"
+    },
+    {
+      "x": -2,
+      "y": 0,
+      "z": 3,
+      "part": "Wheel"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "z": 0,
+      "part": "Wheel"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "z": 3,
+      "part": "Wheel"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": 1,
+      "part": "Interior"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": 0,
+      "part": "Suspension"
+    }
   ]
 }

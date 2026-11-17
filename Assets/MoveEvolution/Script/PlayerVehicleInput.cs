@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerVehicleInput : MonoBehaviour
@@ -20,7 +20,7 @@ public class PlayerVehicleInput : MonoBehaviour
 
         if (back)
         {
-            if (ForwardSpeed() > 1f) brake = 1f;   // ÁÙ¦b©¹«e½Ä¡AS ¥ı·í·Ù¨®
+            if (ForwardSpeed() > 1f) brake = 1f;   // é‚„åœ¨å¾€å‰è¡ï¼ŒS å…ˆç•¶ç…è»Š
             else throttle = -1f;
         }
 

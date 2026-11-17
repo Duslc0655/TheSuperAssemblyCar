@@ -39507,6 +39507,7 @@ MonoBehaviour:
   frontDistance: 30
   frontHeight: 9
   lookHeight: 5
+  doorHeight: 3
   allowSkip: 1
   onFinished:
     m_PersistentCalls:

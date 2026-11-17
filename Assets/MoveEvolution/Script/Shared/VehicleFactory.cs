@@ -1,9 +1,9 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 
 public static class VehicleFactory
 {
-    // position ¬O¨®¤l©³³¡ªº¤¤¤ßÂI¡CNPC ªº¨® playerControlled ¥Î¹w³]ªº false¡C
+    // position æ˜¯è»Šå­åº•éƒ¨çš„ä¸­å¿ƒé»ã€‚NPC çš„è»Š playerControlled ç”¨é è¨­çš„ falseã€‚
     public static VehicleDriver Spawn(CarBlueprint bp, Vector3 position, Quaternion rotation,
                                       bool playerControlled = false, float cellSize = 1f)
     {
